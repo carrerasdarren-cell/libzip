@@ -93,6 +93,21 @@ test_unknown_length_window(void) {
         zip_source_free(window);
         return -1;
     }
+    if (zip_source_seek(window, -1, SEEK_END) < 0) {
+        fprintf(stderr, "can't seek relative to end of window source\n");
+        zip_source_free(window);
+        return -1;
+    }
+    if (zip_source_tell(window) != 4) {
+        fprintf(stderr, "window source reported wrong position after SEEK_END\n");
+        zip_source_free(window);
+        return -1;
+    }
+    if (zip_source_read(window, &c, 1) != 1 || c != '9') {
+        fprintf(stderr, "window source SEEK_END ignored window start\n");
+        zip_source_free(window);
+        return -1;
+    }
     zip_source_free(window);
 
     return 0;

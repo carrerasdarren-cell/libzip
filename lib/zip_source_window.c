@@ -280,7 +280,7 @@ static zip_int64_t window_read(zip_source_t *src, void *_ctx, void *data, zip_ui
                 zip_error_set(&ctx->error, ZIP_ER_INVAL, 0);
                 return -1;
             }
-            ctx->offset = (zip_uint64_t)lower_offset - ctx->start;
+            ctx->offset = (zip_uint64_t)lower_offset;
             return 0;
         }
 
