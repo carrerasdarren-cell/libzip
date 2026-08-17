@@ -217,7 +217,6 @@ zip_dirent_t *_zip_dirent_clone(const zip_dirent_t *sde) {
 
     if (sde) {
         (void)memcpy_s(tde, sizeof(*tde), sde, sizeof(*sde));
-        _zip_extra_fields_clone(&tde->extra_fields, NULL);
     }
     else {
         _zip_dirent_init(tde);

@@ -253,6 +253,7 @@ ZIP_EXTERN int zip_file_extra_field_set(zip_t *za, zip_uint64_t idx, zip_uint16_
 
 int _zip_file_extra_field_prepare_for_change(zip_t *za, zip_uint64_t idx) {
     zip_entry_t *e;
+    zip_extra_fields_t extra_fields;
 
     if (idx >= za->nentry) {
         zip_error_set(&za->error, ZIP_ER_INVAL, 0);
@@ -276,6 +277,15 @@ int _zip_file_extra_field_prepare_for_change(zip_t *za, zip_uint64_t idx) {
             zip_error_set(&za->error, ZIP_ER_MEMORY, 0);
             return -1;
         }
+    }
+
+    if (e->orig) {
+        extra_fields = e->orig->extra_fields;
+        if (!_zip_extra_fields_clone(&extra_fields, &za->error)) {
+            _zip_extra_fields_fini(&extra_fields);
+            return -1;
+        }
+        e->changes->extra_fields = extra_fields;
     }
 
     e->changes->changed |= ZIP_DIRENT_EXTRA_FIELD;
